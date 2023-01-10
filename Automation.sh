@@ -43,4 +43,26 @@ fi
 
 #TASK 02 END
  
+#TASK 03 START
+
+# Checking if inventory file exists, if not create
+if [[ ! -f ${docroot}/inventory.html ]];
+then
+	echo -e 'Log Type\t-\tTime Created\t-\tType\t-\tSize' > ${docroot}/inventory.html
+fi
+
+# Inserting archived logs into html file
+if [[ -f ${docroot}/inventory.html ]];
+then
+	size=$(du -h /temp/${name}-httpd-logs-${timestamp}.tar | awk '{print $1}')
+	echo -e "httpd-logs\t-\t${timestamp}\t-\ttar\t-\t${size}" >> ${docroot}/inventory.html
+fi
+
+# Crearing a cron job that runs the script everyday as root
+if [[ ! -f /etc/cron.d/automation ]];
+then
+	echo "* * * * * root /root/aitomation.sh" >> /etc/cron.d/automation
+fi
+
+#TASK 03 END
 
